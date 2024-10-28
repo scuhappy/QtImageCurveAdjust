@@ -12,13 +12,16 @@ ImgAdjust::ImgAdjust(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->actionCurve_Adjust,&QAction::triggered,this,&ImgAdjust::OnAdjust);
     connect(ui->actionOpen,&QAction::triggered,this,&ImgAdjust::OnOpen);
+    connect(ui->actionSave,&QAction::triggered,this,&ImgAdjust::OnSave);
 }
 
 ImgAdjust::~ImgAdjust()
 {
     delete ui;
 }
-
+void ImgAdjust::OnSave(){
+    showImg.save("/Users/bytedance/Documents/ps_curve/tmp.png");
+}
 void ImgAdjust::OnAdjust()
 {
     ui->label->setPixmap(QPixmap::fromImage(m_img));
@@ -43,7 +46,7 @@ void ImgAdjust::OnAdjust()
 void ImgAdjust::OnRefresh()
 {
     ImageCureAdjustControl *adjCtr = static_cast<ImageCureAdjustControl*>(sender());
-    QImage showImg = m_img;
+    showImg = m_img;
     ICAChannelMode mode = adjCtr->GetAdjustChannelMode();
 
 
