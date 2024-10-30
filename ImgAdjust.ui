@@ -46,6 +46,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionCurve_Adjust"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSaveLUT"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -62,6 +63,11 @@
    <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+  </action>
+  <action name="actionSaveLUT">
+   <property name="text">
+    <string>SaveLUT</string>
    </property>
   </action>
  </widget>

@@ -7,7 +7,7 @@
 namespace Ui {
 class ImgAdjust;
 }
-
+class ImageCureAdjustControl;
 class ImgAdjust : public QMainWindow
 {
     Q_OBJECT
@@ -21,11 +21,13 @@ private slots:
     void OnRefresh();
     void OnOpen();
     void OnSave();
+    void OnSaveLUT();
 private:
     Ui::ImgAdjust *ui;
 
     QImage m_img;
     QImage showImg;
+    ImageCureAdjustControl *adjCtr;
 };
 
 #endif // IMGADJUST_H

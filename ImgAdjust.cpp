@@ -4,20 +4,36 @@
 #include "ImageCureAdjustControl/ImageTools.h"
 #include <QFile>
 #include <QFileDialog>
+#include <QDebug>
 
 ImgAdjust::ImgAdjust(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent),adjCtr(nullptr),
     ui(new Ui::ImgAdjust)
 {
     ui->setupUi(this);
     connect(ui->actionCurve_Adjust,&QAction::triggered,this,&ImgAdjust::OnAdjust);
     connect(ui->actionOpen,&QAction::triggered,this,&ImgAdjust::OnOpen);
     connect(ui->actionSave,&QAction::triggered,this,&ImgAdjust::OnSave);
+    connect(ui->actionSaveLUT,&QAction::triggered,this,&ImgAdjust::OnSaveLUT);
 }
 
 ImgAdjust::~ImgAdjust()
 {
     delete ui;
+}
+void ImgAdjust::OnSaveLUT(){
+    QImage lut(255,1,QImage::Format_RGBA8888);
+    std::vector<unsigned char> lookUpTable = adjCtr->GetColorLookUpTable(ICAChannel::eChannelAll);
+    QColor color;
+    for(int i=0;i<255;i++){
+        qDebug()<<"lookUpTable[i] "<<lookUpTable[i];
+        color.setRed(lookUpTable[i]);
+        color.setGreen(lookUpTable[i]);
+        color.setBlue(lookUpTable[i]);
+        color.setAlpha(255);
+        lut.setPixelColor(i,0,color);
+    }
+    lut.save("/Users/bytedance/Documents/ps_curve/tmp_lut.png");
 }
 void ImgAdjust::OnSave(){
     showImg.save("/Users/bytedance/Documents/ps_curve/tmp.png");
@@ -25,21 +41,23 @@ void ImgAdjust::OnSave(){
 void ImgAdjust::OnAdjust()
 {
     ui->label->setPixmap(QPixmap::fromImage(m_img));
-    ImageCureAdjustControl *adjCtr = new ImageCureAdjustControl(this);
-    adjCtr->setWindowFlag(Qt::Tool);
-    adjCtr->setFixedSize(430, 365);
-    adjCtr->setAttribute(Qt::WA_DeleteOnClose);
+    if(adjCtr == nullptr){
+        adjCtr = new ImageCureAdjustControl(this);
+        adjCtr->setWindowFlag(Qt::Tool);
+        adjCtr->setFixedSize(430, 365);
+        adjCtr->setAttribute(Qt::WA_DeleteOnClose);
 
-    if(adjCtr->Init(m_img))
-    {
-        adjCtr->show();
-        connect(adjCtr,&ImageCureAdjustControl::SigCurveChanged,this,&ImgAdjust::OnRefresh);
-        connect(adjCtr,&ImageCureAdjustControl::SigChannelModeChanged,this,&ImgAdjust::OnRefresh);
-        connect(adjCtr,&ImageCureAdjustControl::SigChannelChanged,this,&ImgAdjust::OnRefresh);
+        if(adjCtr->Init(m_img))
+        {
+            adjCtr->show();
+            connect(adjCtr,&ImageCureAdjustControl::SigCurveChanged,this,&ImgAdjust::OnRefresh);
+            connect(adjCtr,&ImageCureAdjustControl::SigChannelModeChanged,this,&ImgAdjust::OnRefresh);
+            connect(adjCtr,&ImageCureAdjustControl::SigChannelChanged,this,&ImgAdjust::OnRefresh);
+        }
     }
     else
     {
-        delete adjCtr;
+       adjCtr->show();
     }
 }
 
