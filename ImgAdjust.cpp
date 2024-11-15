@@ -22,6 +22,8 @@ ImgAdjust::~ImgAdjust()
     delete ui;
 }
 void ImgAdjust::OnSaveLUT(){
+    QUrl filePath = QFileDialog::getSaveFileUrl(this,tr("Image"),QDir::homePath(),tr("Images (*.png *.jpg *.jpeg)"));
+    qDebug()<<filePath.path();
     QImage lut(255,1,QImage::Format_RGBA8888);
     std::vector<unsigned char> lookUpTable = adjCtr->GetColorLookUpTable(ICAChannel::eChannelAll);
     QColor color;
@@ -33,10 +35,12 @@ void ImgAdjust::OnSaveLUT(){
         color.setAlpha(255);
         lut.setPixelColor(i,0,color);
     }
-    lut.save("/Users/bytedance/Documents/ps_curve/tmp_lut.png");
+    lut.save(filePath.path());
 }
 void ImgAdjust::OnSave(){
-    showImg.save("/Users/bytedance/Documents/ps_curve/tmp.png");
+    QUrl filePath = QFileDialog::getSaveFileUrl(this,tr("Image"),QDir::homePath(),tr("Images (*.png *.jpg *.jpeg)"));
+    qDebug()<<filePath.path();
+    showImg.save(filePath.path());
 }
 void ImgAdjust::OnAdjust()
 {
