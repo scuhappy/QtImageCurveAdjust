@@ -30,3 +30,11 @@ and i modify some method return type(origin is exit(-1) change to return nullptr
 aaCurve impl is from： https://github.com/pyzhangxiang/qt-curve-editor
 
 and i add function: aaCurvePtr createCurve(const std::vector<std::pair<unsigned char, unsigned char> >& spline_data, SplineType type) use to load data from std vector
+
+# Quick start
+```
+mkdir build
+cd build
+qmake ..
+make -j8
+```
