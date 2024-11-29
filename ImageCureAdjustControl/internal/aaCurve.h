@@ -139,7 +139,7 @@ namespace aaAaa{
 
     };
 
-    typedef std::auto_ptr<aaCurve> aaCurvePtr;
+    typedef std::shared_ptr<aaCurve> aaCurvePtr;
 
     class aaCubicSpline : public aaCurve{
     private:
